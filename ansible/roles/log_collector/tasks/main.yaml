@@ -1,0 +1,57 @@
+- name: Install deps
+  ansible.builtin.apt:
+    lock_timeout: 240
+    update_cache: true
+    pkg:
+      - ca-certificates
+      - iptables-persistent
+      #- bird2
+      - rsyslog
+      - rsyslog-gnutls
+
+- name: Import the Datadog Agent role from the Datadog collection
+  ansible.builtin.import_role:
+    name: datadog.dd.agent
+  vars:
+    datadog_api_key: "{{ DATADOG_API_KEY }}"
+    datadog_site: "{{ DATADOG_SITE }}"
+    datadog_config:
+      hostname: "{{ VM_HOSTNAME }}"
+      logs_enabled: true
+    datadog_additional_groups: "systemd-journal"
+    datadog_checks:
+      logs:
+        - type: journald
+          path: /var/log/journal/
+        - type: file
+          path: "/var/log/mikrotik.log"
+          service: "mesh_devices"
+          source: "mikrotik"
+
+- name: Rsyslog main config
+  ansible.builtin.copy:
+    src: ../files/rsyslog.conf
+    dest: /etc/rsyslog.conf
+
+- name: Rsyslog mikrotik config
+  ansible.builtin.copy:
+    src: ../files/10-mikrotik.conf
+    dest: /etc/rsyslog.d/10-mikrotik.conf
+
+# - name: Rsyslog datadog config
+#   ansible.builtin.template:
+#     src: ../templates/datadog.conf.j2
+#     dest: /etc/rsyslog.d/20-datadog.conf
+
+- name: Reload rsyslog
+  ansible.builtin.systemd_service:
+    name: rsyslog
+    state: restarted
+    enabled: true
+    daemon_reload: true
+
+- name: Reload datadog
+  ansible.builtin.systemd_service:
+    name: datadog-agent
+    state: restarted
+    enabled: true

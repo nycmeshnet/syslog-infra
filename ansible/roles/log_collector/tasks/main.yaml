@@ -20,9 +20,10 @@
       logs_enabled: true
     datadog_additional_groups: "systemd-journal"
     datadog_checks:
-      logs:
+      journald:
         - type: journald
           path: /var/log/journal/
+      mesh_devices:
         - type: file
           path: "/var/log/mikrotik.log"
           service: "mesh_devices"

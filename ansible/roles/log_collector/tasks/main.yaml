@@ -7,7 +7,6 @@
       - iptables-persistent
       #- bird2
       - rsyslog
-      - rsyslog-gnutls
 
 - name: Import the Datadog Agent role from the Datadog collection
   ansible.builtin.import_role:
@@ -40,11 +39,6 @@
   ansible.builtin.copy:
     src: ../files/10-mikrotik.conf
     dest: /etc/rsyslog.d/10-mikrotik.conf
-
-# - name: Rsyslog datadog config
-#   ansible.builtin.template:
-#     src: ../templates/datadog.conf.j2
-#     dest: /etc/rsyslog.d/20-datadog.conf
 
 - name: Reload rsyslog
   ansible.builtin.systemd_service:

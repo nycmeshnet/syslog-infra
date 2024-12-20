@@ -134,7 +134,7 @@ protocol static {
 #}
 
 protocol ospf v2 {
-  	ipv4 {
+    ipv4 {
 		import none;
 	};
 	area 0 {
@@ -149,7 +149,7 @@ protocol ospf v2 {
                 {{ BIRD_NEIGHBOR }};
             };
 		};
-        interface "lo" {
+        interface "dummy*" {
             cost 10;
         };
 	};

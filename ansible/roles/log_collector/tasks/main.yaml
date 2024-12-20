@@ -25,7 +25,7 @@
 - name: Reload networking
   ansible.builtin.systemd_service:
     name: networking
-    state: reloaded
+    state: restarted
     enabled: true
 
 - name: Import the Datadog Agent role from the Datadog collection

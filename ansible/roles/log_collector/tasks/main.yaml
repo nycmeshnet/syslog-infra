@@ -14,16 +14,19 @@
     dest: /lib/systemd/system/bird.service
     mode: "0644"
 
-- name: Netplan lo interface
+- name: Copy system interface definition
   ansible.builtin.template:
-    src: netplan_lo.yaml.j2
-    dest: /etc/netplan/lo.yaml
-    mode: "600"
+    src: interfaces.j2
+    dest: /etc/network/interfaces
+    owner: root
+    group: root
+    mode: "0600"
 
-- name: Netplan apply
-  ansible.builtin.command:
-    cmd: "bash -c 'netplan apply && touch /tmp/netplan_applied'"
-    creates: /tmp/netplan_applied
+- name: Reload networking
+  ansible.builtin.systemd_service:
+    name: networking
+    state: reloaded
+    enabled: true
 
 - name: Import the Datadog Agent role from the Datadog collection
   ansible.builtin.import_role:

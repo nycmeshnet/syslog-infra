@@ -1,0 +1,19 @@
+# Managed by ansible
+
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet static
+    address {{ VM_MGT_IP }}/{{ INTERNAL_HOST_IDENTIFIER }}
+    gateway {{ DEFAULT_GATEWAY }}
+
+auto dummy0
+iface dummy0 inet static
+    address {{ ROUTER_ID }}/32
+    pre-up ip link add dummy0 type dummy
+
+auto dummy1
+iface dummy1 inet static
+    address {{ SYSLOG_IP }}/32
+    pre-up ip link add dummy1 type dummy

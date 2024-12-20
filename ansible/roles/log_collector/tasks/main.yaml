@@ -5,8 +5,25 @@
     pkg:
       - ca-certificates
       - iptables-persistent
-      #- bird2
+      - bird2
       - rsyslog
+
+- name: Bird systemd unit
+  ansible.builtin.copy:
+    src: bird.service
+    dest: /lib/systemd/system/bird.service
+    mode: "0644"
+
+- name: Netplan lo interface
+  ansible.builtin.template:
+    src: netplan_lo.yaml.j2
+    dest: /etc/netplan/lo.yaml
+    mode: "600"
+
+- name: Netplan apply
+  ansible.builtin.command:
+    cmd: "bash -c 'netplan apply && touch /tmp/netplan_applied'"
+    creates: /tmp/netplan_applied
 
 - name: Import the Datadog Agent role from the Datadog collection
   ansible.builtin.import_role:
@@ -32,13 +49,15 @@
 
 - name: Rsyslog main config
   ansible.builtin.copy:
-    src: ../files/rsyslog.conf
+    src: rsyslog.conf
     dest: /etc/rsyslog.conf
+    mode: "600"
 
 - name: Rsyslog mikrotik config
   ansible.builtin.copy:
-    src: ../files/10-mikrotik.conf
+    src: 10-mikrotik.conf
     dest: /etc/rsyslog.d/10-mikrotik.conf
+    mode: "644"
 
 - name: Reload rsyslog
   ansible.builtin.systemd_service:
@@ -51,4 +70,18 @@
   ansible.builtin.systemd_service:
     name: datadog-agent
     state: restarted
+    enabled: true
+
+- name: Bird config
+  ansible.builtin.template:
+    src: bird.conf.j2
+    dest: /etc/bird/bird.conf
+    mode: "640"
+    owner: "bird"
+    group: "bird"
+
+- name: Reload bird
+  ansible.builtin.systemd_service:
+    name: bird
+    state: reloaded
     enabled: true

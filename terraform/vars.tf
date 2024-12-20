@@ -81,3 +81,24 @@ variable "datadog_site" {
   description = "datadog site url"
   sensitive   = true
 }
+
+variable "router_id" {
+  type        = string
+  description = "IP to use for the router id"
+}
+
+variable "bird_neighbor" {
+  type        = string
+  description = "neighbor for the ospf router"
+}
+
+variable "bird_network" {
+  type        = string
+  description = "ospf network"
+}
+
+variable "syslog_ip" {
+  type        = string
+  description = "IP used for syslog traffic"
+  default     = "10.10.5.14"
+}

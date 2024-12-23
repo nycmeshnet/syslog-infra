@@ -49,6 +49,10 @@
             path: "/var/log/mikrotik.log"
             service: "mesh_devices"
             source: "mikrotik"
+          - type: file
+            path: "/var/log/apc.log"
+            service: "mesh_devices"
+            source: "apc"
 
 - name: Rsyslog main config
   ansible.builtin.copy:

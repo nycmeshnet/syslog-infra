@@ -62,6 +62,12 @@
     dest: /etc/rsyslog.d/10-mikrotik.conf
     mode: "644"
 
+- name: APC mikrotik config
+  ansible.builtin.copy:
+    src: 20-apc.conf
+    dest: /etc/rsyslog.d/20-apc.conf
+    mode: "644"
+
 - name: Reload rsyslog
   ansible.builtin.systemd_service:
     name: rsyslog

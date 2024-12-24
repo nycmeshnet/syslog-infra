@@ -57,6 +57,10 @@
             path: "/var/log/ubiquiti.log"
             service: "mesh_devices"
             source: "ubiquiti"
+          - type: file
+            path: "/var/log/siklu.log"
+            service: "mesh_devices"
+            source: "siklu"
 
 - name: Rsyslog main config
   ansible.builtin.copy:
@@ -64,10 +68,10 @@
     dest: /etc/rsyslog.conf
     mode: "600"
 
-- name: Rsyslog mikrotik config
+- name: Rsyslog skilu and mikrotik config
   ansible.builtin.copy:
-    src: 10-mikrotik.conf
-    dest: /etc/rsyslog.d/10-mikrotik.conf
+    src: 10-port514.conf
+    dest: /etc/rsyslog.d/10-port514.conf
     mode: "644"
 
 - name: Rsyslog APC config

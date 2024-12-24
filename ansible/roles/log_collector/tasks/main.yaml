@@ -53,6 +53,10 @@
             path: "/var/log/apc.log"
             service: "mesh_devices"
             source: "apc"
+          - type: file
+            path: "/var/log/ubiquiti.log"
+            service: "mesh_devices"
+            source: "ubiquiti"
 
 - name: Rsyslog main config
   ansible.builtin.copy:

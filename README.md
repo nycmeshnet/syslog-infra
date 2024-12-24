@@ -4,5 +4,6 @@
 
 | Port        | Protocol           | Device Type |
 | ------------- | ------------- | ------------- |
-| 514      | UDP  | Mikrotik Router OS |
-| 515      | UDP  | APC UPS |
+| 514 | UDP | Mikrotik Router OS |
+| 515 | UDP | APC UPS |
+| 516 | UDP | Ubiquiti airOS |

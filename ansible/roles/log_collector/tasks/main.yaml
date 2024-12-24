@@ -70,10 +70,16 @@
     dest: /etc/rsyslog.d/10-mikrotik.conf
     mode: "644"
 
-- name: APC mikrotik config
+- name: Rsyslog APC config
   ansible.builtin.copy:
     src: 20-apc.conf
     dest: /etc/rsyslog.d/20-apc.conf
+    mode: "644"
+
+- name: Rsyslog Ubiquiti airOS config
+  ansible.builtin.copy:
+    src: 30-ubiquiti.conf
+    dest: /etc/rsyslog.d/30-ubiquiti.conf
     mode: "644"
 
 - name: Reload rsyslog

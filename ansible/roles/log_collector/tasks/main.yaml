@@ -61,6 +61,10 @@
             path: "/var/log/siklu.log"
             service: "mesh_devices"
             source: "siklu"
+          - type: file
+            path: "/var/log/brocade.log"
+            service: "mesh_devices"
+            source: "brocade"
 
 - name: Rsyslog main config
   ansible.builtin.copy:
@@ -84,6 +88,12 @@
   ansible.builtin.copy:
     src: 30-ubiquiti.conf
     dest: /etc/rsyslog.d/30-ubiquiti.conf
+    mode: "644"
+
+- name: Rsyslog Brocade config
+  ansible.builtin.copy:
+    src: 40-brocade.conf
+    dest: /etc/rsyslog.d/40-brocade.conf
     mode: "644"
 
 - name: Reload rsyslog

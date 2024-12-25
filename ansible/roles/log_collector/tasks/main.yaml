@@ -65,6 +65,10 @@
             path: "/var/log/brocade.log"
             service: "mesh_devices"
             source: "brocade"
+          - type: file
+            path: "/var/log/cambium.log"
+            service: "mesh_devices"
+            source: "cambium"
 
 - name: Rsyslog main config
   ansible.builtin.copy:

@@ -14,6 +14,7 @@ resource "ansible_group" "syslog_mgt_group" {
     BIRD_NEIGHBOR                = var.bird_neighbor
     SYSLOG_IP                    = var.syslog_ip
     DEFAULT_GATEWAY              = var.vm_mgt_default_gateway
+    local_password               = var.local_password
   }
 }
 

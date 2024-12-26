@@ -22,6 +22,30 @@
   ansible.builtin.import_role:
     name: nycmesh.common.support_account
 
+- name: Add JB1
+  ansible.posix.authorized_key:
+    user: support
+    state: present
+    key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBdURCo7H3kpfLP1CFSawN81D1OTlCnXxX3DAsKDml+T j1"
+
+- name: Add JB2
+  ansible.posix.authorized_key:
+    user: support
+    state: present
+    key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDG/5hL1cTXg7dvDiaFQeBxklUh7QCGQljTBP6XXLr9j j2"
+
+- name: Add JB3
+  ansible.posix.authorized_key:
+    user: support
+    state: present
+    key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEn4nMeWvdNa0VZNx3vcBpZnJbXcTPyDd+YhlwAYTptP j3"
+
+- name: Add JB4
+  ansible.posix.authorized_key:
+    user: support
+    state: present
+    key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKULjIUF5hAULvkyCYU3BMf6SCOw4OMPyTvqfOqLBfnD j4"
+
 - name: Bird systemd unit
   ansible.builtin.copy:
     src: bird.service

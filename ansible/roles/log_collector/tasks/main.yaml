@@ -108,6 +108,21 @@
             service: "mesh_devices"
             source: "cambium"
 
+- name: Create log file for {{ item }}
+  ansible.builtin.file:
+    path: "/var/log/{{ item }}.log"
+    owner: root
+    group: root
+    mode: "0644"
+    state: touch
+  loop:
+    - mikrotik
+    - apc
+    - ubiquiti
+    - siklu
+    - brocade
+    - cambium
+
 - name: Rsyslog main config
   ansible.builtin.copy:
     src: rsyslog.conf

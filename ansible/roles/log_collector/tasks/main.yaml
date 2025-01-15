@@ -113,6 +113,11 @@
             path: "/var/log/cambium.log"
             service: "mesh_devices"
             source: "cambium"
+          - type: file
+            path: "/var/log/ilo.log"
+ilog/idrac.log"
+            service: "mesh_devices"
+            source: "idrac"
 
 - name: Create log file for {{ item }}
   ansible.builtin.file:
@@ -128,6 +133,8 @@
     - siklu
     - brocade
     - cambium
+    - ilo
+    - idrac
 
 - name: Rsyslog main config
   ansible.builtin.copy:
@@ -157,6 +164,18 @@
   ansible.builtin.copy:
     src: 40-brocade.conf
     dest: /etc/rsyslog.d/40-brocade.conf
+    mode: "644"
+
+- name: Rsyslog ilo config
+  ansible.builtin.copy:
+    src: 50-ilo.conf
+    dest: /etc/rsyslog.d/50-ilo.conf
+    mode: "644"
+
+- name: Rsyslog idrac config
+  ansible.builtin.copy:
+    src: 60-idrac.conf
+    dest: /etc/rsyslog.d/60-idrac.conf
     mode: "644"
 
 - name: Reload rsyslog

@@ -115,7 +115,10 @@
             source: "cambium"
           - type: file
             path: "/var/log/ilo.log"
-ilog/idrac.log"
+            service: "mesh_devices"
+            source: "ilo"
+          - type: file
+            path: "/var/log/idrac.log"
             service: "mesh_devices"
             source: "idrac"
 

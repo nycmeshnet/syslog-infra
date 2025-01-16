@@ -1,4 +1,5 @@
-- hosts: syslog_mgt
+- name: Syslog
+  hosts: syslog_mgt
   become: true
   roles:
     - role: log_collector

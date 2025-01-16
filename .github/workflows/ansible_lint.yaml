@@ -12,5 +12,5 @@ jobs:
         with:
           args: ""
           setup_python: "true"
-          working_directory: "ansible"
+          working_directory: "/home/runner/work/syslog-infra/syslog-infra/ansible/"
           requirements_file: ""

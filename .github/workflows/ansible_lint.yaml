@@ -10,7 +10,7 @@ jobs:
       - name: Run ansible-lint
         uses: ansible/ansible-lint@6178262c7e0d5e9792b5990d40029047760b8f09
         with:
-          args: ""
+          args: "--exclude /home/runner/work/syslog-infra/syslog-infra/.ansible/collections/"
           setup_python: "true"
           working_directory: "./ansible/"
           requirements_file: ""

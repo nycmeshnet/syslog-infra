@@ -7,11 +7,10 @@ resource "ansible_group" "syslog_mgt_group" {
     DATADOG_API_KEY              = var.datadog_api_key
     DATADOG_SITE                 = var.datadog_site
     VM_HOSTNAME                  = var.hostname
-    ROUTER_ID                    = var.router_id
+    bird_router_id               = var.router_id
     VM_MGT_IP                    = var.vm_mgt_ip
     INTERNAL_HOST_IDENTIFIER     = var.internal_host_identifier
-    BIRD_NETWORK                 = var.bird_network
-    BIRD_NEIGHBOR                = var.bird_neighbor
+    bird_network                 = var.bird_network
     SYSLOG_IP                    = var.syslog_ip
     DEFAULT_GATEWAY              = var.vm_mgt_default_gateway
     local_password               = var.local_password

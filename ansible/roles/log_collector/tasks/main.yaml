@@ -5,7 +5,6 @@
     pkg:
       - ca-certificates
       - iptables-persistent
-      - bird2
       - rsyslog
 
 - name: Import the ssh_config role from the nycmesh.common collection
@@ -51,12 +50,6 @@
     user: support
     state: present
     key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKULjIUF5hAULvkyCYU3BMf6SCOw4OMPyTvqfOqLBfnD j4"
-
-- name: Bird systemd unit
-  ansible.builtin.copy:
-    src: bird.service
-    dest: /lib/systemd/system/bird.service
-    mode: "0644"
 
 - name: Copy system interface definition
   ansible.builtin.template:
@@ -194,16 +187,8 @@
     state: restarted
     enabled: true
 
-- name: Bird config
-  ansible.builtin.template:
-    src: bird.conf.j2
-    dest: /etc/bird/bird.conf
-    mode: "640"
-    owner: "bird"
-    group: "bird"
-
-- name: Reload bird
-  ansible.builtin.systemd_service:
-    name: bird
-    state: reloaded
-    enabled: true
+- name: Import the bird_basic role from the nycmesh.common collection
+  ansible.builtin.import_role:
+    name: nycmesh.common.bird2_basic
+  vars:
+    bird_binds_to_service: "rsyslog.service"

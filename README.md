@@ -8,3 +8,5 @@
 | 515 | UDP | APC UPS |
 | 516 | UDP | Ubiquiti airOS |
 | 517 | UDP | Brocade |
+| 518 | UDP | iLO |
+| 519 | UDP | iDRAC |

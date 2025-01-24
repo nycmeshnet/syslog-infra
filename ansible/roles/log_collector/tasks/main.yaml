@@ -192,3 +192,4 @@
     name: nycmesh.common.bird2_basic
   vars:
     bird_binds_to_service: "rsyslog.service"
+    bird_dummy_interface: "dummy*"

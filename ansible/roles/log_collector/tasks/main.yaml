@@ -114,6 +114,10 @@
             path: "/var/log/idrac.log"
             service: "mesh_devices"
             source: "idrac"
+          - type: file
+            path: "/var/log/netgear.log"
+            service: "mesh_devices"
+            source: "netgear"
 
 - name: Create log file for {{ item }}
   ansible.builtin.file:
@@ -131,6 +135,7 @@
     - cambium
     - ilo
     - idrac
+    - netgear
 
 - name: Rsyslog main config
   ansible.builtin.copy:
@@ -172,6 +177,12 @@
   ansible.builtin.copy:
     src: 60-idrac.conf
     dest: /etc/rsyslog.d/60-idrac.conf
+    mode: "644"
+
+- name: Rsyslog netgear config
+  ansible.builtin.copy:
+    src: 70-netgear.conf
+    dest: /etc/rsyslog.d/70-netgear.conf
     mode: "644"
 
 - name: Reload rsyslog

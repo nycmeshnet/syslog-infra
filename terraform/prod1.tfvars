@@ -1,0 +1,8 @@
+proxmox_node             = "nycmesh-713-r640-02"
+proxmox_storage_location = "local-lvm"
+hostname                 = "nycmesh-713-syslog-3"
+vm_mgt_ip                = "10.70.90.207"
+vm_nic                   = "vmbr0v32"
+vm_mgt_default_gateway   = "10.70.90.1"
+router_id                = "10.70.90.208"
+bird_network             = "10.69.0.0/16"

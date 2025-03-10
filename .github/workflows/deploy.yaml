@@ -11,19 +11,28 @@ on:
       - master
 
 jobs:
+  deploy_prod3:
+    name: Deploy prod3
+    uses: ./.github/workflows/deploy_syslog.yaml
+    with:
+      environment: prod3
+    secrets: inherit
+    #if: github.ref == 'refs/heads/master'
+
   deploy_prod2:
     name: Deploy prod2
     uses: ./.github/workflows/deploy_syslog.yaml
     with:
       environment: prod2
     secrets: inherit
+    needs: deploy_prod3
     #if: github.ref == 'refs/heads/master'
 
-  deploy_prod3:
-    name: Deploy prod3
+deploy_prod1:
+    name: Deploy prod1
     uses: ./.github/workflows/deploy_syslog.yaml
     with:
-      environment: prod3
+      environment: prod1
     secrets: inherit
     needs: deploy_prod2
     #if: github.ref == 'refs/heads/master'

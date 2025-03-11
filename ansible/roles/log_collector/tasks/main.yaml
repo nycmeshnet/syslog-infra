@@ -1,0 +1,206 @@
+- name: Install deps
+  ansible.builtin.apt:
+    lock_timeout: 240
+    update_cache: true
+    pkg:
+      - ca-certificates
+      - iptables-persistent
+      - rsyslog
+
+- name: Import the ssh_config role from the nycmesh.common collection
+  ansible.builtin.import_role:
+    name: nycmesh.common.ssh_config
+
+- name: Import the mesh_dns role from the nycmesh.common collection
+  ansible.builtin.import_role:
+    name: nycmesh.common.mesh_dns
+  vars:
+    extra_resolvers: "9.9.9.9"
+
+- name: Import the support_account role from the nycmesh.common collection
+  ansible.builtin.import_role:
+    name: nycmesh.common.support_account
+
+- name: Import the motd role from the nycmesh.common collection
+  ansible.builtin.import_role:
+    name: nycmesh.common.motd
+  vars:
+    github_repo: https://github.com/nycmeshnet/syslog-infra
+
+- name: Add JB1
+  ansible.posix.authorized_key:
+    user: support
+    state: present
+    key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBdURCo7H3kpfLP1CFSawN81D1OTlCnXxX3DAsKDml+T j1"
+
+- name: Add JB2
+  ansible.posix.authorized_key:
+    user: support
+    state: present
+    key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDG/5hL1cTXg7dvDiaFQeBxklUh7QCGQljTBP6XXLr9j j2"
+
+- name: Add JB3
+  ansible.posix.authorized_key:
+    user: support
+    state: present
+    key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEn4nMeWvdNa0VZNx3vcBpZnJbXcTPyDd+YhlwAYTptP j3"
+
+- name: Add JB4
+  ansible.posix.authorized_key:
+    user: support
+    state: present
+    key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKULjIUF5hAULvkyCYU3BMf6SCOw4OMPyTvqfOqLBfnD j4"
+
+- name: Copy system interface definition
+  ansible.builtin.template:
+    src: interfaces.j2
+    dest: /etc/network/interfaces
+    owner: root
+    group: root
+    mode: "0600"
+
+- name: Reload networking
+  ansible.builtin.systemd_service:
+    name: networking
+    state: restarted
+    enabled: true
+
+- name: Import the Datadog Agent role from the Datadog collection
+  ansible.builtin.import_role:
+    name: datadog.dd.agent
+  vars:
+    datadog_api_key: "{{ DATADOG_API_KEY }}"
+    datadog_site: "{{ DATADOG_SITE }}"
+    datadog_config:
+      hostname: "{{ VM_HOSTNAME }}"
+      logs_enabled: true
+    datadog_additional_groups: "systemd-journal"
+    datadog_checks:
+      journald:
+        logs:
+          - type: journald
+            path: /var/log/journal/
+      mesh_devices:
+        logs:
+          - type: file
+            path: "/var/log/mikrotik.log"
+            service: "mesh_devices"
+            source: "mikrotik"
+          - type: file
+            path: "/var/log/apc.log"
+            service: "mesh_devices"
+            source: "apc"
+          - type: file
+            path: "/var/log/ubiquiti.log"
+            service: "mesh_devices"
+            source: "ubiquiti"
+          - type: file
+            path: "/var/log/siklu.log"
+            service: "mesh_devices"
+            source: "siklu"
+          - type: file
+            path: "/var/log/brocade.log"
+            service: "mesh_devices"
+            source: "brocade"
+          - type: file
+            path: "/var/log/cambium.log"
+            service: "mesh_devices"
+            source: "cambium"
+          - type: file
+            path: "/var/log/ilo.log"
+            service: "mesh_devices"
+            source: "ilo"
+          - type: file
+            path: "/var/log/idrac.log"
+            service: "mesh_devices"
+            source: "idrac"
+          - type: file
+            path: "/var/log/netgear.log"
+            service: "mesh_devices"
+            source: "netgear"
+
+- name: Create log file for {{ item }}
+  ansible.builtin.file:
+    path: "/var/log/{{ item }}.log"
+    owner: root
+    group: root
+    mode: "0644"
+    state: touch
+  loop:
+    - mikrotik
+    - apc
+    - ubiquiti
+    - siklu
+    - brocade
+    - cambium
+    - ilo
+    - idrac
+    - netgear
+
+- name: Rsyslog main config
+  ansible.builtin.copy:
+    src: rsyslog.conf
+    dest: /etc/rsyslog.conf
+    mode: "600"
+
+- name: Rsyslog skilu and mikrotik config
+  ansible.builtin.copy:
+    src: 10-port514.conf
+    dest: /etc/rsyslog.d/10-port514.conf
+    mode: "644"
+
+- name: Rsyslog APC config
+  ansible.builtin.copy:
+    src: 20-apc.conf
+    dest: /etc/rsyslog.d/20-apc.conf
+    mode: "644"
+
+- name: Rsyslog Ubiquiti airOS config
+  ansible.builtin.copy:
+    src: 30-ubiquiti.conf
+    dest: /etc/rsyslog.d/30-ubiquiti.conf
+    mode: "644"
+
+- name: Rsyslog Brocade config
+  ansible.builtin.copy:
+    src: 40-brocade.conf
+    dest: /etc/rsyslog.d/40-brocade.conf
+    mode: "644"
+
+- name: Rsyslog ilo config
+  ansible.builtin.copy:
+    src: 50-ilo.conf
+    dest: /etc/rsyslog.d/50-ilo.conf
+    mode: "644"
+
+- name: Rsyslog idrac config
+  ansible.builtin.copy:
+    src: 60-idrac.conf
+    dest: /etc/rsyslog.d/60-idrac.conf
+    mode: "644"
+
+- name: Rsyslog netgear config
+  ansible.builtin.copy:
+    src: 70-netgear.conf
+    dest: /etc/rsyslog.d/70-netgear.conf
+    mode: "644"
+
+- name: Reload rsyslog
+  ansible.builtin.systemd_service:
+    name: rsyslog
+    state: restarted
+    enabled: true
+    daemon_reload: true
+
+- name: Reload datadog
+  ansible.builtin.systemd_service:
+    name: datadog-agent
+    state: restarted
+    enabled: true
+
+- name: Import the bird_basic role from the nycmesh.common collection
+  ansible.builtin.import_role:
+    name: nycmesh.common.bird2_basic
+  vars:
+    bird_binds_to_service: "rsyslog.service"
+    bird_dummy_interface: "dummy*"

@@ -8,8 +8,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
-      - name: Setup ansible
-        run: pip install --require-hashes -r ansible/requirements.txt
       - name: Run ansible-lint
         uses: ansible/ansible-lint@6178262c7e0d5e9792b5990d40029047760b8f09
         with:

@@ -16,5 +16,5 @@ jobs:
           working_directory: "./ansible/"
           requirements_file: ""
       - name: Setup ansible
-        run: pip install --require-hashes -r ansible/requirements.txt && export PATH="$HOME/.local/bin:$PATH" && ansible-galaxy collection install -r ansible/roles/requirements.yml
+        run: pip install --require-hashes -r ansible/requirements.txt
 

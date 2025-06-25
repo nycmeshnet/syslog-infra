@@ -9,7 +9,7 @@ jobs:
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
       - name: Run ansible-lint
-        uses: ansible/ansible-lint@6178262c7e0d5e9792b5990d40029047760b8f09
+        uses: ansible/ansible-lint@b51f629b3dc97063fe894f6fb595e60a8f095a27
         with:
           args: "--exclude .ansible/collections/"
           setup_python: "true"

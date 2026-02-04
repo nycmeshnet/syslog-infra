@@ -8,10 +8,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v4
+
+      - uses: actions/setup-python@e797f83bcb11b83ae66e0230d6156d7c80228e7c #@v5
+        with:
+          python-version: '3.11'
+  
+      - name: Setup ansible
+        run: pip install --require-hashes -r ansible/requirements.txt && export PATH="$HOME/.local/bin:$PATH" && ansible-galaxy collection install --force -r ansible/roles/requirements.yml
+
       - name: Run ansible-lint
         uses: ansible/ansible-lint@d7cd7cfa2469536527aceaef9ef2ec6f2fb331cb # v25
         with:
           args: "--exclude .ansible/collections/"
-          setup_python: "true"
+          setup_python: "false"
           working_directory: "./ansible/"
           requirements_file: ""

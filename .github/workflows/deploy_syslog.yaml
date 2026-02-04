@@ -28,9 +28,9 @@ jobs:
     environment: ${{ inputs.environment }}
     steps:
       - name: Checkout
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # @v4
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # @v4
       
-      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 #@v5
+      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 #@v5
         with:
           python-version: '3.11'
       
@@ -68,16 +68,12 @@ jobs:
           terraform validate
         working-directory: ./terraform/
 
-      - name: Setup WireGuard
-        run:  |
-          sudo apt-get update && sudo apt-get install -y wireguard
-          echo "${{ secrets.WIREGUARD_PRIVATE_KEY }}" > privatekey
-          sudo ip link add dev wg0 type wireguard
-          sudo ip address add dev wg0 ${{ secrets.WIREGUARD_OVERLAY_NETWORK_IP }} peer ${{ secrets.WIREGUARD_PEER }}
-          sudo wg set wg0 listen-port 48123 private-key privatekey peer ${{ secrets.WIREGUARD_PEER_PUBLIC_KEY }} allowed-ips 0.0.0.0/0 endpoint ${{ secrets.WIREGUARD_ENDPOINT }}
-          sudo ip link set up dev wg0
-          rm privatekey
-      
+      - name: Setup NYC Mesh VPN
+        uses: nycmeshnet/nycmesh-vpn-action@main
+        with:
+          config-name: "ghsyslog"
+          private-key: ${{ secrets.WIREGUARD_PRIVATE_KEY }}
+
       - name: Terraform Apply
         run: |
           terraform apply -auto-approve -input=false -var-file=${{ inputs.environment }}.tfvars

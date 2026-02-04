@@ -1,5 +1,6 @@
 - name: Syslog
   hosts: syslog_mgt
   become: true
+  gather_facts: true
   roles:
     - role: log_collector

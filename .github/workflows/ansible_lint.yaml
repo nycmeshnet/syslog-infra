@@ -17,7 +17,7 @@ jobs:
         run: pip install --require-hashes -r ansible/requirements.txt && export PATH="$HOME/.local/bin:$PATH" && ansible-galaxy collection install --force -r ansible/roles/requirements.yml
 
       - name: Run ansible-lint
-        uses: ansible/ansible-lint@d7cd7cfa2469536527aceaef9ef2ec6f2fb331cb # v25
+        uses: ansible/ansible-lint@7f6abc5ef97d0fb043a0f3d416dfbc74399fbda0 # v25
         with:
           args: "--exclude .ansible/collections/"
           setup_python: "false"
